@@ -118,8 +118,96 @@ public class L004 {
         return count;
     }
 
-    public static void qcombination(int[] arr, String ans, int psf) {
+    // ===========================================coin
+    // change========================================
+    public static int coinchangePermuInfi_01(int[] arr, int tar, String ans) {
+        if (tar == 0) {
+            System.out.println(ans);
+            return 1;
+        }
 
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (tar - arr[i] > =0)
+                count += coinchangePermuInfi_01(arr, tar - arr[i], ans + arr[i]);
+        }
+        return count;
     }
 
+    public static int coinchangePermu_01(int[] arr, int tar, String ans, boolean[] vis) {
+        if (tar == 0) {
+            System.out.println(ans);
+            return 1;
+        }
+
+        int count = 0;
+        for (int i = 0; i < arr.length; i++) {
+            if (!vis[i] && tar - arr[i] >= 0) {
+                vis[i] = true;
+                count += coinchangePermu_01(arr, tar - arr[i], ans + arr[i], vis);
+                vis[i] = false;
+            }
+        }
+        return count;
+    }
+
+    public static int coinchangeCombi_INFI_01(int[] arr, int idx, int tar, String ans) {
+        if (tar == 0) {
+            System.out.println(ans);
+            return 1;
+        }
+
+        int count = 0;
+        for (int i = idx; i < arr.length; i++) {
+            if (tar - arr[i] >= 0)
+                count += coinchangeCombi_INFI_01(arr, i, tar - arr[i], ans + arr[i]);
+        }
+        return count;
+    }
+
+    public static int coinchangeCombi_01(int[] arr, int idx, int tar, String ans) {
+        if (tar == 0) {
+            System.out.println(ans);
+            return 1;
+        }
+
+        int count = 0;
+        for (int i = idx; i < arr.length; i++) {
+            if (tar - arr[i] >= 0)
+                count += coinchangeCombi_01(arr, i + 1, tar - arr[i], ans + arr[i]);
+        }
+        return count;
+    }
+
+    // 2 tree ki help se combination nikalenge ek mein include krenge aur doosri
+    // mein nhi krenge
+    public static int coinchangeCombi_02(int[] arr, int idx, int tar, String ans) {
+        if (idx == arr.length || tar == 0) {
+            if (tar == 0) {
+                System.out.println(ans);
+                return 1;
+            }
+            return 0;
+        }
+        int count = 0;
+        if (tar - arr[idx] >= 0)
+            count += coinchangeCombi_02(arr, idx + 1, tar - arr[idx], ans + arr[idx]);
+        count += coinchangeCombi_02(arr, idx + 1, tar, ans);
+        return count;
+    }
+
+    public static int coinchangeCombiINFI_02(int[] arr, int idx, int tar, String ans) {
+        if (idx == arr.length || tar == 0) {
+            if (tar == 0) {
+                System.out.println(ans);
+                return 1;
+            }
+            return 0;
+        }
+        int count = 0;
+        if (tar - arr[idx] >= 0)
+            count += coinchangeCombiINFI_02(arr, idx, tar - arr[idx], ans + arr[idx]);
+        count += coinchangeCombiINFI_02(arr, idx + 1, tar, ans);
+        return count;
+    }
 }
