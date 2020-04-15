@@ -151,10 +151,75 @@ int mazepath_multiHVD_02(int sr, int sc, int er, int ec, string ans)
     return count;
 }
 
+// ====================================floodfill===============================
+// 8 direction hai aur hme last tak pauchna ha
+
+vector<vector<int>> dir = {{0, 1}, {-1, 1}, {-1, 0}, {-1, -1}, {0, -1}, {1, -1}, {1, 0}, {1, 1}};
+vector<string> dirN = {"R", "E", "U", "N", "L", "W", "D", "S"};
+
+bool isPossiblefloodfill(vector<vector<int>> board, int cr, int cc)
+{
+    if (cr < 0 || cr >= board.size() || cc <= 0 || cc >= board.size() || board[cr][cc] == 2 || board[cr][cc] == 0)
+        return false;
+
+    return true;
+}
+
+int floodfill(int sr, int sc, int er, int ec, vector<vector<int>> &board, int rad, string ans)
+{
+    if (sr == er && sc == ec)
+    {
+        cout << ans << endl;
+        return 1;
+    }
+    int count = 0;
+    board[sr][sc] = 2;
+    for (int i = 0; i < dir.size(); i++)
+    {
+        for (int mag = 1; mag <= rad; mag++)
+        {
+            int r = sr + mag * dir[i][0];
+            int c = sc + mag * dir[i][1];
+            if (isPossiblefloodfill(board, r, c))
+            {
+
+                count += floodfill(r, c, er, ec, board, rad, ans + dirN[i] + to_string(mag));
+            }
+        }
+    }
+    board[sr][sc] = 1;
+    return count;
+}
 
 
+
+
+void mazePathSet()
+{
+    int sr = 0, sc = 0, er = 2, ec = 2;
+    // vector<string> ans;
+
+    // ans= mazepath_HV_01(sr, sc, er, ec);
+    // ans = mazepath_HVD_01(sr, sc, er, ec);
+    // ans = mazepath_multiHVD_01(sr, sc, er, ec);
+
+    // cout << mazepath_HV_02(sr, sc, er, ec, "") << endl;
+    // cout << mazepath_HVD_02(sr, sc, er, ec, "") << endl;
+    // cout << mazepath_multiHVD_02(sr, sc, er, ec, "") << endl;
+
+    vector<vector<int>> board(er + 1, vector<int>(ec + 1, 1));
+    // int rad = max(er, ec);
+    int rad = 1;
+    cout << floodfill(sr, sc, er, ec, board, rad, "") << endl;
+
+    // for (string s : ans)
+    // {
+    //     cout << s << " ";
+    // }
+}
 int main()
 {
+    mazePathSet();
 
     return 0;
 }
