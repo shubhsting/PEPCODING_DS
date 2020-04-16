@@ -191,8 +191,75 @@ int floodfill(int sr, int sc, int er, int ec, vector<vector<int>> &board, int ra
     return count;
 }
 
+// leetcode ka 200 question ka nswer
+vector<vector<int>> dir_ = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
 
+void islandwalafloodfill(vector<vector<int>> &board, int cr, int cc)
+{
+    if (cr == board.size() && cc == board[0].size())
+    {
 
+        return;
+    }
+
+    board[cr][cc] = 0;
+    for (int i = 0; i < dir.size(); i++)
+    {
+
+        int r = cr + dir_[i][0];
+        int c = cc + dir_[i][1];
+        if (isPossiblefloodfill(board, r, c))
+        {
+
+            islandwalafloodfill(board, r, c);
+        }
+    }
+}
+
+int noOfIslandss(vector<vector<int>> &board)
+{
+    int count = 0;
+    for (int i = 0; i < board.size(); i++)
+    {
+        for (int j = 0; j < board[0].size(); j++)
+        {
+            if (board[i][j] == 1)
+            {
+                count++;
+                islandwalafloodfill(board, i, j);
+            }
+        }
+    }
+    return count;
+}
+
+// 0 mtlb ki path band hain
+bool isValid_(int r, int c, vector<vector<int>> &board)
+{
+    if (r < 0 || c < 0 || r >= board.size() || c >= board[0].size() || board[r][c] == 0 || board[r][c] == 2)
+        return false;
+
+    return true;
+}
+int dfs(int sr, int sc, vector<vector<int>> &board, int rad)
+{
+
+    int count = 0;
+    board[sr][sc] = 2;
+    for (int i = 0; i < dir_.size(); i++)
+    {
+        for (int jump = 1; jump <= rad; jump++)
+        {
+            int r = sr + jump * dir_[i][0];
+            int c = sc + jump * dir_[i][1];
+            if (isValid_(r, c, board))
+            {
+                count += dfs(r, c, board, rad);
+            }
+        }
+    }
+    return count;
+}
 
 void mazePathSet()
 {
@@ -217,6 +284,8 @@ void mazePathSet()
     //     cout << s << " ";
     // }
 }
+
+
 int main()
 {
     mazePathSet();
