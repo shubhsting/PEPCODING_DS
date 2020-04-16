@@ -284,7 +284,36 @@ void mazePathSet()
     //     cout << s << " ";
     // }
 }
+vector<vector<int>> subset_(vector<int> &arr, int vidx, vector<int> &list)
+{
+    if (vidx == arr.size())
+    {
+        vector<vector<int>> base;
+        vector<int> ll(list);
+        base.push_back(ll);
+        return base;
+    }
 
+    vector<vector<int>> ans;
+
+    vector<vector<int>> left = subset_(arr, vidx + 1, list);
+    for (vector<int> e : left)
+        ans.push_back(e);
+
+    list.push_back(arr[vidx]);
+    vector<vector<int>> right = subset_(arr, vidx + 1, list);
+    for (auto e : right)
+        ans.push_back(e);
+    list.pop_back();
+
+    return ans;
+}
+
+vector<vector<int>> subsets(vector<int> &nums)
+{
+    vector<int> list;
+    return subset_(nums, 0, list);
+}
 
 int main()
 {
