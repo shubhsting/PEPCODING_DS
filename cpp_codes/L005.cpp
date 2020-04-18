@@ -104,24 +104,19 @@ int permutationQueen2D(vector<vector<bool>> &boxes, int qpsf, int tnq, string an
 bool isSafeToPlaceQueen(vector<vector<bool>> &boxes, int row, int col)
 {
     vector<vector<int>> Qdir = {{0, -1}, {-1, -1}, {-1, 0}, {-1, 1}};
-
-    for (int d = 0; d < Qdir.size(); d++)
+    for (int i = 0; i < Qdir.size(); i++)
     {
-        for (int rad = 1; rad <= boxes.size(); rad++)
+        for (int jump = 1; jump <= Qdir.size(); jump++)
         {
-            int r = row + rad * Qdir[d][0];
-            int c = col + rad * Qdir[d][1];
-
-            if (r >= 0 && c >= 0 && r < boxes.size() && c < boxes.size())
+            int r = row + jump * Qdir[i][0];
+            int c = col + jump * Qdir[i][1];
+            if (r >= 0 && r < boxes.size() && c >= 0 && c < boxes[0].size())
             {
                 if (boxes[r][c])
                     return false;
             }
-            else
-                break;
         }
     }
-
     return true;
 }
 
@@ -132,17 +127,16 @@ int Nqueen_01(vector<vector<bool>> &boxes, int tnq, int idx, string ans)
         cout << ans << endl;
         return 1;
     }
-
     int count = 0;
-    for (int i = idx; i < boxes.size() * boxes[0].size(); i++)
+    for (int i = 0; i < boxes.size() * boxes[0].size(); i++)
     {
-        int x = i / boxes[0].size();
-        int y = i % boxes[0].size();
-        if (isSafeToPlaceQueen(boxes, x, y))
+        int r = i / boxes[0].size();
+        int c = i % boxes[0].size();
+        if (isSafeToPlaceQueen(boxes, r, c))
         {
-            boxes[x][y] = true;
-            count += Nqueen_01(boxes, tnq - 1, i + 1, ans + "(" + to_string(x) + ", " + to_string(y) + ") ");
-            boxes[x][y] = false;
+            boxes[r][c] = true;
+            count += Nqueen_01(boxes, tnq - 1, idx + 1, ans + "(" + to_string(r) + ", " + to_string(c) + ") ");
+            boxes[r][c] = false;
         }
     }
     return count;
@@ -152,8 +146,32 @@ vector<bool> rowA;
 vector<bool> colA;
 vector<bool> diag;
 vector<bool> adiag;
-int Nqueen_2(int n,int m,int tnq,int idx,string ans){
-
+int Nqueen_2(int n, int m, int tnq, int idx, string ans)
+{
+    if (tnq == 0)
+    {
+        cout << ans << endl;
+        return 1;
+    }
+    int count = 0;
+    for (int i = 0; i < n * m; i++)
+    {
+        int r = i / m;
+        int c = i % m;
+        if (!rowA[r] && !colA[c] && !diag[r - c + m - 1] && !adiag[r + c])
+        {
+            rowA[r] = true;
+            colA[c] = true;
+            diag[r - c + m - 1] = true;
+            adiag[r + c] = true;
+            count += Nqueen_2(n, m, tnq - 1, idx, ans + "(" + to_string(r) + ", " + to_string(c) + ") ");
+            rowA[r] = false;
+            colA[c] = false;
+            diag[r - c + m - 1] = false;
+            adiag[r + c] = false;
+        }
+    }
+    return count;
 }
 
 int main()
