@@ -148,6 +148,14 @@ int Nqueen_01(vector<vector<bool>> &boxes, int tnq, int idx, string ans)
     return count;
 }
 
+vector<bool> rowA;
+vector<bool> colA;
+vector<bool> diag;
+vector<bool> adiag;
+int Nqueen_2(int n,int m,int tnq,int idx,string ans){
+
+}
+
 int main()
 {
     vector<bool> arr(6, false);
