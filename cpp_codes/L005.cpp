@@ -174,6 +174,70 @@ int Nqueen_2(int n, int m, int tnq, int idx, string ans)
     return count;
 }
 
+int rowA_ = 0;
+int colA_ = 0;
+int diag_ = 0;
+int adiag_ = 0;
+int Nqueen_3(int n, int m, int tnq, int idx, string ans)
+{
+    if (tnq == 0)
+    {
+        cout << ans << endl;
+        return 1;
+    }
+    int count = 0;
+    for (int i = 0; i < m * n; i++)
+    {
+        int r = i / m;
+        int c = i % m;
+        if (!(rowA_ & (1 << r)) && !(colA_ & (1 << c)) && !(diag_ & (1 << (r - c + m - 1))) && !(adiag_ & (1 << (r + c))))
+        {
+            rowA_ ^= (1 << r);
+            colA_ ^= (1 << c);
+            diag_ ^= (1 << (r - c + m - 1));
+            adiag_ ^= (1 << (r + c));
+            count += Nqueen_3(n, m, tnq - 1, idx + 1, ans + "(" + to_string(x) + ", " + to_string(y) + ") ");
+            rowA_ ^= (1 << r);
+            colA_ ^= (1 << c);
+            diag_ ^= (1 << (r - c + m - 1));
+            adiag_ ^= (1 << (r + c));
+        }
+    }
+    return count;
+}
+
+int Nqueen_3_sub(int n, int m, int tnq, int idx, string ans)
+{
+    if (idx == m * n || tnq == 0)
+    {
+        if (tnq == 0)
+        {
+            cout << ans << endl;
+            return 1;
+        }
+        return 0;
+    }
+    int count = 0;
+
+    int r = idx / m;
+    int c = idx % m;
+    if (!(rowA_ & (1 << r)) && !(colA_ & (1 << c)) && !(diag_ & (1 << (r - c + m - 1))) && !(adiag_ & (1 << (r + c))))
+    {
+        rowA_ ^= (1 << r);
+        colA_ ^= (1 << c);
+        diag_ ^= (1 << (r - c + m - 1));
+        adiag_ ^= (1 << (r + c));
+        count += Nqueen_3_sub(n, m, tnq - 1, idx + 1, ans + "(" + to_string(x) + ", " + to_string(y) + ") ");
+        rowA_ ^= (1 << r);
+        colA_ ^= (1 << c);
+        diag_ ^= (1 << (r - c + m - 1));
+        adiag_ ^= (1 << (r + c));
+    }
+    count += Nqueen_3_sub(n, m, tnq, idx + 1, ans);
+    return count;
+}
+
+
 int main()
 {
     vector<bool> arr(6, false);
