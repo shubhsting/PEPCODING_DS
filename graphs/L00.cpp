@@ -276,9 +276,9 @@ void constructGraph()
 }
 int main()
 {
-    vector<bool> vis(n, false);
-    constructGraph();
-    bfs_03(1, vis);
+    // vector<bool> vis(n, false);
+    // constructGraph();
+    // bfs_03(1, vis);
     // preOrder(0, vis, 0, to_string(0) + " ");
     // hamintonianPath(2, 2, vis, 0, "");
     return 0;
