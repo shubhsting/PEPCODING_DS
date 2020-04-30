@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class L00 {
     public static class Edge {
@@ -61,8 +62,8 @@ public class L00 {
         addEdge(graph, 2, 3, 10);
         addEdge(graph, 3, 4, 10);
         addEdge(graph, 4, 5, 10);
-        // addEdge(graph, 4, 6, 10);
-        // addEdge(graph, 5, 6, 10);
+        addEdge(graph, 4, 6, 10);
+        addEdge(graph, 5, 6, 10);
         // addEdge(graph, 2, 5, 10);
         // removeEdge(graph, 3, 2);
         // removeVtx(graph, 4);
@@ -70,8 +71,9 @@ public class L00 {
         boolean[] vis = new boolean[n];
         // System.out.print(allPath(0, 6, graph, vis,""));
         // hamiltonianPath(2, 2, graph, 0, vis, "");
-        System.out.println(nofCycles(graph, vis));
+        // System.out.println(nofCycles(graph, vis));
         // allPath(0,6, graph, vis, "");
+        bfs_02(graph, 1, vis);
 
     }
 
@@ -128,7 +130,8 @@ public class L00 {
                 dfs_GCC(gp, vis, e.v);
         }
     }
-// this returns no of parts of a graph
+
+    // this returns no of parts of a graph
     public static int nofCycles(ArrayList<Edge>[] gp, boolean[] vis) {
         int count = 0;
         for (int i = 0; i < gp.length; i++) {
@@ -141,6 +144,46 @@ public class L00 {
         return count;
     }
 
+    public static class Pair {
+        int v = 0;
+        String ans = "";
+        int level = 0;
+
+        Pair(int v, String ans, int level) {
+            this.v = v;
+            this.ans = ans;
+            this.level = level;
+        }
+        Pair(int v,String ans){
+            this.v=v;
+            this.ans=ans;
+        }
+
+
+    }
+
+    public static void bfs_02(ArrayList<Edge>[] gp, int src, boolean[] vis) {
+        LinkedList<Pair> que = new LinkedList<>();
+        int dest = 6;
+        que.addLast(new Pair(src, src + " ", 0));
+        while (que.size() != 0) {
+            Pair vtx = que.removeFirst();
+            if (vis[vtx.v]) {
+                System.out.println("Cycle: " + vtx.ans);
+                continue;
+            }
+            if (vtx.v == dest) {
+                System.out.println("Destination : " + vtx.ans + " ---> " + vtx.level);
+            }
+            vis[vtx.v] = true;
+            for (Edge e : gp[vtx.v]) {
+                if (!vis[e.v])
+                    que.addLast(new Pair(e.v, vtx.ans + e.v + " ", vtx.level + 1));
+            }
+        }
+
+    }
+    
     public static void main(String[] args) {
         constructGraph();
 
