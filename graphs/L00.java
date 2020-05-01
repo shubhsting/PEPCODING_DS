@@ -73,7 +73,7 @@ public class L00 {
         // hamiltonianPath(2, 2, graph, 0, vis, "");
         // System.out.println(nofCycles(graph, vis));
         // allPath(0,6, graph, vis, "");
-        bfs_02(graph, 1, vis);
+        bfs(graph, 1, vis);
 
     }
 
@@ -145,21 +145,48 @@ public class L00 {
     }
 
     public static class Pair {
-        int v = 0;
+        int vtx = 0;
         String ans = "";
         int level = 0;
 
-        Pair(int v, String ans, int level) {
-            this.v = v;
+        Pair(int vtx, String ans, int level) {
+            this.vtx = vtx;
             this.ans = ans;
             this.level = level;
         }
-        Pair(int v,String ans){
-            this.v=v;
-            this.ans=ans;
+
+        Pair(int vtx, String ans) {
+            this.vtx = vtx;
+            this.ans = ans;
         }
 
+    }
 
+    public static void bfs(ArrayList<Edge>[] gp, int src, boolean[] vis) {
+        LinkedList<Pair> que = new LinkedList<>();
+        int dest = 6;
+        que.addLast(new Pair(src, src + " "));
+        que.addLast(null);
+        while (que.size() != 1) {
+            if (que.getFirst() == null) {
+                que.removeFirst();
+                que.addLast(null);
+            }
+            Pair idxpair = que.removeFirst();
+            if (vis[idxpair.vtx]) {
+                System.out.println("Cycle: " + idxpair.vtx);
+                continue;
+            }
+            if (idxpair.vtx == dest) {
+                System.out.println("Dest: " + idxpair.ans);
+            }
+            vis[idxpair.vtx] = true;
+            for (Edge e : gp[idxpair.vtx]) {
+                if (!vis[e.v])
+                    que.addLast(new Pair(e.v, idxpair.ans + e.v + " "));
+            }
+
+        }
     }
 
     public static void bfs_02(ArrayList<Edge>[] gp, int src, boolean[] vis) {
@@ -167,23 +194,23 @@ public class L00 {
         int dest = 6;
         que.addLast(new Pair(src, src + " ", 0));
         while (que.size() != 0) {
-            Pair vtx = que.removeFirst();
-            if (vis[vtx.v]) {
-                System.out.println("Cycle: " + vtx.ans);
+            Pair rvtx = que.removeFirst();
+            if (vis[rvtx.vtx]) {
+                System.out.println("Cycle: " + rvtx.ans);
                 continue;
             }
-            if (vtx.v == dest) {
-                System.out.println("Destination : " + vtx.ans + " ---> " + vtx.level);
+            if (rvtx.vtx == dest) {
+                System.out.println("Destination : " + rvtx.ans + " ---> " + rvtx.level);
             }
-            vis[vtx.v] = true;
-            for (Edge e : gp[vtx.v]) {
+            vis[rvtx.vtx] = true;
+            for (Edge e : gp[rvtx.vtx]) {
                 if (!vis[e.v])
-                    que.addLast(new Pair(e.v, vtx.ans + e.v + " ", vtx.level + 1));
+                    que.addLast(new Pair(e.v, rvtx.ans + e.v + " ", rvtx.level + 1));
             }
         }
 
     }
-    
+
     public static void main(String[] args) {
         constructGraph();
 
