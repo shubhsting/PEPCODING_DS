@@ -7,9 +7,10 @@ public class directedgraphs {
 
     public static void solve() {
         constructGraph();
-        topologicalsort();
-        KahnsAlgo();
-        topologicalsortcycle();
+        // topologicalsort();
+        // KahnsAlgo();
+        // topologicalsortcycle();
+        SCC();
     }
 
     public static int N = 8;
@@ -44,6 +45,15 @@ public class directedgraphs {
         graph[2].add(1);
         graph[3].add(1);
         graph[1].add(0);
+
+        // graph[0].add(1);
+        // graph[1].add(2);
+        // graph[2].add(3);
+        // graph[3].add(0);
+        // graph[2].add(4);
+        // graph[4].add(5);
+        // graph[5].add(6);
+        // graph[6].add(4);
 
         // display();
     }
@@ -133,4 +143,47 @@ public class directedgraphs {
         }
     }
 
+    public static int DFS_SCC(int src, ArrayList<Integer>[] ngraph, boolean[] vis, ArrayList<Integer> ans) {
+        vis[src] = true;
+        int count = 0;
+        for (Integer e : ngraph[src]) {
+            if (!vis[e])
+                count += DFS_SCC(e, ngraph, vis, ans);
+        }
+        ans.add(src);
+        return count + 1;
+    }
+
+    // ye function ye btayega ki kitne independent components hai graph mein mtlb
+    // kitne components ko merge krke hm ek bna skte hai indirectly number of cycles
+    // hi puch rha hai
+    // graph ulta krne pr bhi cycle cycle hi rhegi baaki sb change ho jayega
+    public static void SCC() {
+        boolean[] vis = new boolean[N];
+        ArrayList<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < N; i++) {
+            
+            if (!vis[i])
+                topologicalsort_(vis, i, ans);
+        }
+        // ye graph hmne ulta bnaya hai
+        ArrayList<Integer>[] ngraph = new ArrayList[N];
+        for (int i = 0; i < N; i++)
+            ngraph[i] = new ArrayList<>();
+
+        for (int i = 0; i < N; i++) {
+            for (int ele : graph[i]) {
+                ngraph[ele].add(i);
+            }
+        }
+        vis = new boolean[N];
+        for (int i = ans.size() - 1; i >= 0; i--) {
+            ArrayList<Integer> ans_ = new ArrayList<>();
+            if (!vis[ans.get(i)]) {
+                System.out.println(DFS_SCC(ans.get(i), ngraph, vis, ans_));
+                System.out.println(ans_);
+            }
+
+        }
+    }
 }
