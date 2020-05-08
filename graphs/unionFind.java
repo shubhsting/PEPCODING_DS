@@ -38,8 +38,8 @@ public class unionFind {
             setSize[l2] += l1;
         }
     }
-    public static void constructGraph()
-    {
+
+    public static void constructGraph() {
         addEdge(graph, 0, 1, 10);
         addEdge(graph, 0, 3, 10);
         addEdge(graph, 1, 2, 10);
@@ -48,18 +48,17 @@ public class unionFind {
         addEdge(graph, 4, 5, 2);
         addEdge(graph, 4, 6, 3);
         addEdge(graph, 5, 6, 8);
-    
+
         // addEdge(graph, 2, 5, 2);
-    
-    
+
     }
-    
-    void solve()
-    {
+
+    void solve() {
         constructGraph();
     }
-    
+
     public static void main(String[] args) {
 
     }
 }
+
