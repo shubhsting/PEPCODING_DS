@@ -585,7 +585,7 @@ public class leetcode {
 
     // dfs solution 947 leetcode====================
 
-    public int removeStones(int[][] stones) {
+    public int removeStones_01(int[][] stones) {
         int fcount = 0;
         boolean[] vis = new boolean[stones.length];
         for (int i = 0; i < vis.length; i++) {
@@ -619,14 +619,51 @@ public class leetcode {
     }
 
     // leetcode 959=========================================
-//         //  |-------------------------------------|
-//             |                                     |
-//             |                                     |
-//             |                                     |
-//             |                                     |
-//             |                                     |
-//             |                                     |
-//             |                                     |
-// //          |-------------------------------------|
+    // // |-------------------------------------|
+    // | |
+    // | |
+    // | |
+    // | |
+    // | |
+    // | |
+    // | |
+    // // |-------------------------------------|
 
+    // =====================leetcode 990================================
+
+    public boolean equationsPossible(String[] equations) {
+        par = new int[26];
+        setSize = new int[26];
+        for (int i = 0; i < 26; i++) {
+            par[i] = i;
+            setSize[i] = 1;
+        }
+        for (String str : equations) {
+            char abo = str.charAt(0);
+            char b = str.charAt(1);
+            char cbo = str.charAt(3);
+            if (b == '=') {
+                int par1 = findPar(abo - 'a');
+                int par2 = findPar(cbo - 'a');
+                if (par1 != par2)
+                    mergeset(par1, par2);
+            }
+        }
+
+        for (String str : equations) {
+            char abo = str.charAt(0);
+            char b = str.charAt(1);
+            char cbo = str.charAt(3);
+            if (b == '!') {
+                int par1 = findPar(abo - 'a');
+                int par2 = findPar(cbo - 'a');
+                if (par1 == par2)
+                    return false;
+            }
+        }
+        return true;
+    }
+
+
+    
 }
