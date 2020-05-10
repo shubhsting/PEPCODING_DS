@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class unionFind {
 
@@ -53,6 +54,30 @@ public class unionFind {
 
     }
 
+    public static void KruskalAlgo(int[][] arr) {
+        // arr-->(u,v,w)
+        ArrayList<Edge>[] KGraph = new ArrayList[N];
+        for (int i = 0; i < N; i++) {
+            KGraph[i] = new ArrayList<Edge>();
+        }
+        // weight ke basis pr arrange krenge
+        Arrays.sort(arr, (int[] a, int[] b) -> {
+            return a[2] - b[2]; // this default increasing decreasing ke liye ulta krenge
+        });
+
+        for (int[] ar : arr) {
+            int a = arr[0];
+            int b = arr[1];
+            int p1 = findPar(a);
+            int p2 = findPar(b);
+            if (p1 != p2) {
+                mergeset(p1, p2);
+                addEdge(KGraph, u, v, ar[2]);
+            }
+        }
+        // display(KGraph);
+    }
+
     void solve() {
         constructGraph();
     }
@@ -61,4 +86,3 @@ public class unionFind {
 
     }
 }
-
