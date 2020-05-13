@@ -866,9 +866,97 @@ public class leetcode {
         return count + 1;
     }
 
+    // =============================leetcode 1387===============================
 
+    class edge {
+        int num = 0;
+        int val = 0;
 
+        edge(int num, int val) {
+            this.num = num;
+            this.val = val;
+        }
+    }
 
+    public int getKth(int lo, int hi, int k) {
+        ArrayList<edge> arr = new ArrayList<>();
+        for (int i = lo; i <= hi; i++) {
+            p = 0;
+            pow(i, 0);
+            arr.add(new edge(i, p));
+        }
+        Collections.sort(arr, (edge a, edge b) -> {
+            return a.val - b.val;
+        });
+        return arr.get(k - 1).num;
+    }
+
+    static int p = 0;
+
+    public static void pow(int num, int k) {
+        if (num == 1) {
+            p = k;
+            return;
+        }
+        if (num % 2 == 0)
+            pow(num / 2, k + 1);
+        else
+            pow((3 * num + 1), k + 1);
+    }
+
+    // ====================== leetcode 1306==========================
+
+    public boolean canReach(int[] arr, int start) {
+        boolean[] vis = new boolean[arr.length];
+        return can(arr, start, vis);
+    }
+
+    public boolean can(int[] arr, int start, boolean[] vis) {
+        if (arr[start] == 0)
+            return true;
+        boolean res = false;
+
+        vis[start] = true;
+        if ((start - arr[start]) >= 0 && !vis[start - arr[start]])
+            res = res || can(arr, start - arr[start], vis);
+
+        if ((start + arr[start]) < arr.length && !vis[start + arr[start]])
+            res = res || can(arr, start + arr[start], vis);
+
+        return res;
+    }
+
+    // ======================leetcode 1267========================
+
+    public int countServers(int[][] grid) {
+        if (grid.length == 0 || grid[0].length == 0)
+            return 0;
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (grid[i][j] == 1 && isOk(grid, i, j))
+                    count++;
+            }
+        }
+
+        return count;
+    }
+
+    public boolean isOk(int[][] grid, int cr, int cc) {
+        for (int i = 0; i < grid.length; i++) {
+            if (i != cr && grid[i][cc] == 1)
+                return true;
+        }
+        for (int i = 0; i < grid[0].length; i++) {
+            if (i != cc && grid[cr][i] == 1)
+                return true;
+        }
+        return false;
+    }
 
     
 }
