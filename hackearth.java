@@ -3,14 +3,19 @@ public class hackerearth {
 
     }
 
+    // =======================Olivier and the time ======================
     private static ArrayList<Integer>[] g;
     private static int time = 0;
     private static int[] discoverTime;
     private static int[] processedTime;
     private static boolean[] visited;
 
-    public static void solve() throws Exception {
-        Scanner scan = new Scanner(Syatem.in);
+    public static void main(String[] args) {
+        solve();
+    }
+
+    public static void solve() {
+        Scanner scan = new Scanner(System.in);
         int n = scan.nextInt();
 
         g = new ArrayList[n];
@@ -53,7 +58,6 @@ public class hackerearth {
             }
         }
 
-    
     }
 
     private static void dfs(int u) {
@@ -66,4 +70,11 @@ public class hackerearth {
         }
         processedTime[u] = time++;
     }
+
+
+
+
+
+
+    
 }
