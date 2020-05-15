@@ -1,7 +1,7 @@
 public class hackerearth {
-    public static void main(String[] args) {
+    // public static void main(String[] args) {
 
-    }
+    // }
 
     // =======================Olivier and the time ======================
     private static ArrayList<Integer>[] g;

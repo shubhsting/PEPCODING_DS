@@ -305,6 +305,6 @@ int Nqueen_4_sub(int n, int m, int tnq, int row, string ans)
 int main()
 {
     vector<bool> arr(6, false);
-    cout << queenpermutation1D_sub(arr, 0, 3, 0, "");
+    cout << Nqueen_4(3, 3, 3, 0, "");
     return 0;
 }
