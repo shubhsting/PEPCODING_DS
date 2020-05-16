@@ -6,12 +6,14 @@ public class watersupply {
         Scanner sc = new Scanner(System.in);
 
         int c = sc.nextInt();
-
+        int e = 0;
+        int d = 0;
         for (int i = 0; i < c - 1; i++) {
-            int d = sc.nextInt();
-            int e = sc.nextInt();
+            d = sc.nextInt();
+            e = sc.nextInt();
 
         }
+
         int arr[] = new int[c];
         String str = "";
         String temp = "";

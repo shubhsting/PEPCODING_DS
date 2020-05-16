@@ -162,7 +162,7 @@ public class directedgraphs {
         boolean[] vis = new boolean[N];
         ArrayList<Integer> ans = new ArrayList<>();
         for (int i = 0; i < N; i++) {
-            
+
             if (!vis[i])
                 topologicalsort_(vis, i, ans);
         }
