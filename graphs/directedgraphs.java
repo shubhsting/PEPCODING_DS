@@ -35,16 +35,16 @@ public class directedgraphs {
             graph[i] = new ArrayList<Integer>();
         }
 
-        graph[7].add(5);
-        graph[6].add(7);
-        graph[5].add(2);
-        graph[5].add(6);
-        graph[5].add(4);
-        graph[6].add(4);
-        graph[6].add(3);
-        graph[2].add(1);
-        graph[3].add(1);
-        graph[1].add(0);
+        graph[1].add(2);
+        graph[2].add(3);
+        graph[3].add(4);
+        graph[4].add(5);
+        graph[4].add(2);
+        // graph[6].add(4);
+        // graph[6].add(3);
+        // graph[2].add(1);
+        // graph[3].add(1);
+        // graph[1].add(0);
 
         // graph[0].add(1);
         // graph[1].add(2);
