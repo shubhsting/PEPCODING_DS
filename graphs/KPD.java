@@ -1,5 +1,5 @@
 import java.util.*;
-
+////kruskal prims dijestra
 public class KPD {
     public static class Edge {
         int v = 0;
@@ -12,9 +12,14 @@ public class KPD {
     }
 
     public static void main(String[] args) {
-        int[][] arr = { { 0, 1, 10 }, { 1, 3, 15 }, { 0, 3, 5 }, { 0, 2, 6 }, { 2, 3, 4 } };
-        kruskalAlgo(arr);
+        // int[][] arr = { { 0, 1, 10 }, { 1, 3, 15 }, { 0, 3, 5 }, { 0, 2, 6 }, { 2, 3,
+        // 4 } };
+        // kruskalAlgo(arr);
+        constructGraph();
+        primsAlgo(3);
     }
+
+    static ArrayList<Edge>[] graph;
 
     public static void display(ArrayList<Edge>[] graph) {
         for (int i = 0; i < graph.length; i++) {
@@ -54,20 +59,23 @@ public class KPD {
     }
 
     public static void constructGraph() {
-        // addEdge(graph, 0, 1, 10);
-        // addEdge(graph, 0, 3, 10);
-        // addEdge(graph, 1, 2, 10);
-        // addEdge(graph, 2, 3, 40);
-        // addEdge(graph, 3, 4, 2);
-        // addEdge(graph, 4, 5, 2);
-        // addEdge(graph, 4, 6, 3);
+        graph = new ArrayList[5];
+        for (int i = 0; i < 5; i++) {
+            graph[i] = new ArrayList<>();
+        }
+        addEdge(graph, 0, 1, 2);
+        addEdge(graph, 0, 3, 6);
+        addEdge(graph, 1, 2, 3);
+        addEdge(graph, 1, 3, 8);
+        addEdge(graph, 1, 4, 5);
+        addEdge(graph, 2, 4, 7);
+        addEdge(graph, 3, 4, 9);
         // addEdge(graph, 5, 6, 8);
-
         // addEdge(graph, 2, 5, 2);
 
     }
 
-    static int N = 4;
+    static int N = 5;
 
     /// sbse km wali edge sbse phle lagayega
     public static void kruskalAlgo(int[][] arr) {
@@ -110,25 +118,60 @@ public class KPD {
         }
     }
 
-    public static dijikstraAlgo(int src){
+    public static void dijikstraAlgo(int src) {
         ArrayList<Edge>[] DGraph = new ArrayList[N];
         for (int i = 0; i < N; i++) {
             DGraph[i] = new ArrayList<Edge>();
-        } 
-    
+        }
 
-    PriorityQueue<pair_> pq = new PriorityQueue<>((pair_ a, pair_ b) -> {
-        return a.wsf - b.wsf;
-    });
-    boolean[] vis=new boolean[N];
-    pq.add(new pair_(src,-1,0,0));
-    while(pq.size()!=0){
-        int siz=pq.size();
-        while(siz-->0){
-            pair_ rvtx=pq.poll();
-            if(vis[rvtx.src]) continue;
-            if(rvtx.par!=-1) addEdge(DGraph, rvtx.src, rvtx.par, rvtx.w);
+        PriorityQueue<pair_> pq = new PriorityQueue<>((pair_ a, pair_ b) -> {
+            return a.wsf - b.wsf;
+        });
+        boolean[] vis = new boolean[N];
+        pq.add(new pair_(src, -1, 0, 0));
+        while (pq.size() != 0) {
+            int siz = pq.size();
+            while (siz-- > 0) {
+                pair_ rvtx = pq.poll();
+                if (vis[rvtx.src])
+                    continue;
+                if (rvtx.par != -1)
+                    addEdge(DGraph, rvtx.src, rvtx.par, rvtx.w);
+                vis[rvtx.src] = true;
+                for (Edge e : graph[rvtx.src]) {
+                    if (!vis[e.v])
+                        pq.add(new pair_(e.v, rvtx.src, e.w, rvtx.wsf + e.w));
+                }
+            }
         }
     }
+
+    public static void primsAlgo(int src) {
+        ArrayList<Edge>[] PGraph = new ArrayList[N];
+        for (int i = 0; i < N; i++) {
+            PGraph[i] = new ArrayList<Edge>();
+        }
+
+        PriorityQueue<pair_> pq = new PriorityQueue<>((pair_ a, pair_ b) -> {
+            return a.w - b.w;
+        });
+        boolean[] vis = new boolean[N];
+        pq.add(new pair_(src, -1, 0, 0));
+        while (pq.size() != 0) {
+            int siz = pq.size();
+            while (siz-- > 0) {
+                pair_ rvtx = pq.poll();
+                if (vis[rvtx.src])
+                    continue;
+                if (rvtx.par != -1)
+                    addEdge(PGraph, rvtx.src, rvtx.par, rvtx.w);
+                vis[rvtx.src] = true;
+                for (Edge e : graph[rvtx.src]) {
+                    if (!vis[e.v])
+                        pq.add(new pair_(e.v, rvtx.src, e.w, rvtx.wsf + e.w));
+                }
+            }
+        }
+        display(PGraph);
     }
 }
