@@ -137,6 +137,28 @@ public class leetcode {
         return length;
     }
 
+    // ==================leetcode 22============
+
+    class Solution {
+        public List<String> generateParenthesis(int n) {
+            if (n == 1) {
+                List<String> ret = new ArrayList<>();
+                ret.add("()");
+                return ret;
+            }
+            List<String> myRes = new ArrayList<>();
+            List<String> recRe = generateParenthesis(n - 1);
+            for (String s : recRe) {
+                for (int i = s.length(); i >= 0; i--) {
+                    String fp = s.substring(0, i) + "()" + s.substring(i);
+                    if (!myRes.contains(fp))
+                        myRes.add(fp);
+                }
+            }
+            return myRes;
+        }
+    }
+
     // ==========================leetcode 207
     // =================================================================
 
@@ -958,5 +980,4 @@ public class leetcode {
         return false;
     }
 
-    
 }

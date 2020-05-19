@@ -72,7 +72,7 @@ public class unionFind {
             int p2 = findPar(b);
             if (p1 != p2) {
                 mergeset(p1, p2);
-                addEdge(KGraph, u, v, ar[2]);
+                addEdge(KGraph, a, b, ar[2]);
             }
         }
         // display(KGraph);
