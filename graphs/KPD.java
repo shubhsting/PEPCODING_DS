@@ -1,4 +1,5 @@
 import java.util.*;
+
 ////kruskal prims dijestra
 public class KPD {
     public static class Edge {
@@ -144,6 +145,7 @@ public class KPD {
                 }
             }
         }
+        display(DGraph);
     }
 
     public static void primsAlgo(int src) {
