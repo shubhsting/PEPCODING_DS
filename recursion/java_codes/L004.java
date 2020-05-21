@@ -3,12 +3,18 @@ public class L004 {
     public static void main(String[] args) {
         // int[][] arr=new int[4][4];
         // int[] money = { 1, 2, 3 };
-        int[] arr = new int[5];
-        boolean[] arr1 = new boolean[5];
-        System.out.println(qpermutation(arr, "", 0, arr1));
+        // int[] arr = new int[5];
+        // boolean[] arr1 = new boolean[5];
+        // System.out.println(qpermutation(arr, "", 0, arr1));
         // System.out.print(coinchangeP(money,0,3,""));
         // pair p=floodfill_Min(0,0,3,3,arr);
         // System.out.print(p.len+" "+p.str);
+        crossword(0);
+        for (char[] ar : board) {
+            for (char ch : ar)
+                System.out.print(ch + " ");
+            System.out.println();
+        }
     }
 
     static int[][] dir = { { 0, 1 }, { -1, 1 }, { -1, 0 }, { -1, -1 }, { 0, -1 }, { 1, -1 }, { 1, 0 }, { 1, 1 } };
@@ -129,7 +135,7 @@ public class L004 {
 
         int count = 0;
         for (int i = 0; i < arr.length; i++) {
-            if (tar - arr[i] >=0)
+            if (tar - arr[i] >= 0)
                 count += coinchangePermuInfi_01(arr, tar - arr[i], ans + arr[i]);
         }
         return count;
@@ -251,5 +257,13 @@ public class L004 {
 
         return count;
     }
+
+    static char[][] board = { { '+', '-', '+', '+', '+', '+', '+', '+', '+', '+' },
+            { '+', '-', '+', '+', '+', '+', '+', '+', '+', '+' }, { '+', '-', '-', '-', '-', '-', '-', '-', '+', '+' },
+            { '+', '-', '+', '+', '+', '+', '+', '+', '+', '+' }, { '+', '-', '+', '+', '+', '+', '+', '+', '+', '+' },
+            { '+', '-', '-', '-', '-', '-', '-', '+', '+', '+' }, { '+', '-', '+', '+', '+', '-', '+', '+', '+', '+' },
+            { '+', '+', '+', '+', '+', '-', '+', '+', '+', '+' }, { '+', '+', '+', '+', '+', '-', '+', '+', '+', '+' },
+            { '+', '+', '+', '+', '+', '+', '+', '+', '+', '+' } };
+    static String[] words = { "agra", "norway", "england", "gwalior" };
 
 }
