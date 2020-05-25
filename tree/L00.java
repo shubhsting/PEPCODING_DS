@@ -1,12 +1,14 @@
-import java.util.*;
-
-import javax.lang.model.type.ArrayType;
+import java.util.ArrayList;
 
 public class L00 {
-    public static class Node {
+    public static void main(String[] args) {
+
+    }
+
+    public class Node {
         int data;
-        Node left = null;
-        Node right = null;
+        Node left;
+        Node right;
 
         Node(int data) {
             this.data = data;
@@ -16,7 +18,7 @@ public class L00 {
     static int idx = 0;
 
     public static Node constructTree(int[] arr) {
-        if (idx == arr.length || arr[idx] == -1) {
+        if (idx >= arr.length || arr[idx] == -1) {
             idx++;
             return null;
         }
@@ -27,21 +29,23 @@ public class L00 {
     }
 
     public static void display(Node root) {
-        if (node == null)
-            return;
-        String str = "";
-        str += ((node.left != null) ? node.left.data : ".");
-        str += " <- " + node.data + " -> ";
-        str += ((node.right != null) ? node.right.data : ".");
-        System.out.println(str);
+        String ans = "";
+        if (root.left != null)
+            ans += root.left.data;
+        ans += " <- " + root.data + " -> ";
+        if (root.right != null)
+            ans += root.right.data;
+
         display(root.left);
         display(root.right);
     }
 
+    // ++++++++++++++++++++++++++++++++++ Basic ++++++++++++++++++++++++++++++++
+
     public static int size(Node root) {
-        if (node == null)
+        if (root == null)
             return 0;
-        return size(root.left) + size(root.right) + 1;
+        return size(root.right) + size(root.left) + 1;
     }
 
     public static int height(Node root) {
@@ -50,30 +54,45 @@ public class L00 {
         return Math.max(height(root.left), height(root.right)) + 1;
     }
 
-    public static int maximum(Node root) {
-        if (node == null)
+    public static int Maximum(Node root) {
+        if (root == null)
             return Integer.MIN_VALUE;
-        return Math.max(Math.max(root.data, maximum(root.left)), maximum(root.right));
+        return Math.max(Maximum(root.left), Math.max(Maximum(root.right), root.data));
     }
 
-    public static int minimum(Node root) {
-        if (node == null)
+    public static int Minimum(Node root) {
+        if (root == null)
             return Integer.MAX_VALUE;
-        return Math.MIN(Math.MIN(root.data, minimum(root.left)), minimum(root.right));
+        return Math.min(Maximum(root.left), Math.min(Maximum(root.right), root.data));
     }
 
-    public static boolean find(Node node, int num) {
-        if (node == null)
-            return false;
-        if (node.data == num)
-            return true;
-        return find(node.left, num) || find(node.right, num);
+    public static int Minimum_02(Node root) {
+        if (root == null)
+            return Integer.MAX_VALUE;
+        int min = root.data;
+        if (root.left != null)
+            min = Math.min(min, Minimum_02(root.left));
+        if (root.right != null)
+            min = Math.min(min, Minimum_02(root.right));
+        return min;
     }
+
+    public static boolean find(Node root, int val) {
+        if (root == null)
+            return false;
+        if (root.data == val)
+            return true;
+        return find(root.right, val) || find(root.left, val);
+
+    }
+
+    // Traversal.============================================================
 
     public static void preOrder(Node node) {
         if (node == null)
             return;
-        System.out.println(node.data);
+
+        System.out.print(node.data + " ");
         preOrder(node.left);
         preOrder(node.right);
     }
@@ -81,82 +100,42 @@ public class L00 {
     public static void inOrder(Node node) {
         if (node == null)
             return;
+
         inOrder(node.left);
-        System.out.println(node.data);
+        System.out.print(node.data + " ");
         inOrder(node.right);
     }
 
     public static void postOrder(Node node) {
         if (node == null)
             return;
+
         postOrder(node.left);
         postOrder(node.right);
-        System.out.println(node.data);
+        System.out.print(node.data + " ");
+
     }
 
-    public static boolean rootToNode(Node node, int num, ArrayList<Node> path) {
-        if (node == null)
+    public static boolean rootToNodePath_(Node root, int val, ArrayList<Node> ans) {
+        if (root == null)
             return false;
-        if (node.data == num) {
-            path.add(node);
+        if (root.data == val) {
+            ans.add(root);
             return true;
         }
-        boolean res = rootToNode(node.left, num, path) || rootToNode(node.right, num, path);
+        boolean res = rootToNodePath_(root.left, val, ans) || rootToNodePath_(root.left, val, ans);
         if (res)
-            path.add(node);
+            ans.add(root);
         return res;
     }
 
-    public static void rootToNodePath(Node root, int data) {
-        ArrayList<Node> path = new ArrayList<>();
-        rootToNode(root, data, path);
-        for (Node n : path) {
+    public static void rootToNodePath(Node root,int data){
+        ArrayList<Node> path=new ArrayList<>();
+        rootToNodePath_(root,data,path);
+        for(Node n: path){
             System.out.print(n.data + " -> ");
         }
     }
 
-    public static ArrayList<Node> rootToNode_02(Node node, int num) {
-        if (node == null)
-            return new ArrayList<Node>();
-
-        if (node.data == num) {
-            ArrayList<Node> temp = new ArrayList<>();
-            temp.add(node);
-            return temp;
-        }
-
-        ArrayList<Node> left = rootToNode_02(node.left, num, path);
-        if (left.size() != 0) {
-            left.add(node);
-            return left;
-        }
-        ArrayList<Node> right = rootToNode_02(node.right, num, path);
-        if (right.size() != 0) {
-            right.add(node);
-            return right;
-        }
-        return new ArrayList<>();
-    }
-
-    public Node lowestCommAncestor(Node root, int p, int q) {
-        ArrayList<Node> path1 = new ArrayList<>();
-        ArrayList<Node> path2 = new ArrayList<>();
-
-        rootToNode(root, p, path1);
-        rootToNode(root, q, path2);
-        Node prev = null;
-        int i = path1.size() - 1;
-        int j = path2.size() - 1;
-
-        while (i >= 0 && j >= 0) {
-            if (path1.get(i).data != path2.get(j).data)
-                break;
-
-            prev = path1.get(i);
-            i--;
-            j--;
-        }
-
-        return prev;
-    }
+    public static ArrayList<Node> roottoNode_02(root,val,)
 }

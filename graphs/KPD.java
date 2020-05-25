@@ -176,4 +176,42 @@ public class KPD {
         }
         display(PGraph);
     }
+
+    static int[] dis = new int[7];
+    static int[] low = new int[7];
+    static int[] AP = new int[7];
+    static boolean[] vis = new boolean[7];
+    static int countTime = 0;
+    static int rootCalls = 0;
+
+    public static void dfs_AP(int src, int par) {
+        dis[src] = low[src] = countTime++;
+        vis[src] = true;
+        for (Edge e : graph[src]) {
+            int child = e.v;
+            if (par == -1)
+                rootCalls++;
+            if (!vis[child]) {
+                dfs_AP(child, src);
+                if (dis[src] <= low[child])
+                    AP[src]++;
+
+                if (dis[src] < low[child])
+                    System.out.println("AP bridge" + src + " to " + child);
+            } else if (child != par) {
+                low[src] = Math.min(low[src], dis[child]);
+            }
+        }
+    }
+
+    public static void AP() {
+        int src = 0;
+        dfs_AP(src, -1);
+        if (rootCalls == 1)
+            AP[src]--;
+        for (int i = 0; i < 7; i++) {
+            if (AP[i] != 0)
+                System.out.println("AP @" + i + "-->" + AP[i]);
+        }
+    }
 }
