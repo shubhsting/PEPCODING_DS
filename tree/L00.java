@@ -1,5 +1,6 @@
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
 public class L00 {
@@ -8,7 +9,11 @@ public class L00 {
                 -1 };
         Node root = constructTree(arr);
         // display(root);
-        rightView(root);
+        // rightView(root);
+        // verticalView(root);
+        // VerticalOrderSum(root);
+        // bottomView(root);
+        topView(root);
         // DiaPair ab = diameter_02(root);
         // diameter_03(root);
         // System.out.println(fdiameter);
@@ -398,4 +403,114 @@ public class L00 {
         }
     }
 
+    // helper function for vertical view
+    static int leftMinValue = Integer.MAX_VALUE;
+    static int rightMaxValue = Integer.MIN_VALUE;
+
+    public static void width(Node root, int level) {
+        if (root == null)
+            return;
+        leftMinValue = Math.min(leftMinValue, level);
+        rightMaxValue = Math.max(rightMaxValue, level);
+        width(root.left, level - 1);
+        width(root.right, level + 1);
+    }
+
+    public static class pairVO {
+        Node node = null;
+        int vl = 0;
+
+        pairVO(Node nd, int vlevel) {
+            this.node = nd;
+            this.vl = vlevel;
+        }
+    }
+
+    public static void verticalView(Node root) {
+        width(root, 0);
+        int num = rightMaxValue - leftMinValue + 1;
+        ArrayList<Integer>[] VertView = new ArrayList[num];
+        for (int i = 0; i < num; i++)
+            VertView[i] = new ArrayList<>();
+        LinkedList<pairVO> que = new LinkedList<>();
+        que.addLast(new pairVO(root, -leftMinValue));
+        while (que.size() != 0) {
+            int siz = que.size();
+            while (siz-- > 0) {
+                pairVO rpair = que.removeFirst();
+                VertView[rpair.vl].add(rpair.node.data);
+                if (rpair.node.left != null)
+                    que.addLast(new pairVO(rpair.node.left, rpair.vl - 1));
+                if (rpair.node.right != null)
+                    que.addLast(new pairVO(rpair.node.right, rpair.vl + 1));
+            }
+        }
+        for (ArrayList<Integer> ar : VertView)
+            System.out.println(ar);
+        System.out.println();
+    }
+
+    public static void VerticalOrderSum(Node root) {
+        width(root, 0);
+        int[] arr = new int[rightMaxValue - leftMinValue + 1];
+        LinkedList<pairVO> que = new LinkedList<>();
+        que.addLast(new pairVO(root, -leftMinValue));
+        while (que.size() != 0) {
+            int siz = que.size();
+            while (siz-- > 0) {
+                pairVO rpair = que.removeFirst();
+                arr[rpair.vl] += rpair.node.data;
+                if (rpair.node.left != null)
+                    que.addLast(new pairVO(rpair.node.left, rpair.vl - 1));
+                if (rpair.node.right != null)
+                    que.addLast(new pairVO(rpair.node.right, rpair.vl + 1));
+            }
+        }
+        for (int val : arr)
+            System.out.print(val + " ");
+    }
+
+    public static void bottomView(Node root) {
+        width(root, 0);
+        int[] arr = new int[rightMaxValue - leftMinValue + 1];
+        LinkedList<pairVO> que = new LinkedList<>();
+        que.addLast(new pairVO(root, -leftMinValue));
+        while (que.size() != 0) {
+            int siz = que.size();
+            while (siz-- > 0) {
+                pairVO rpair = que.removeFirst();
+                arr[rpair.vl] = rpair.node.data;
+                if (rpair.node.left != null)
+                    que.addLast(new pairVO(rpair.node.left, rpair.vl - 1));
+                if (rpair.node.right != null)
+                    que.addLast(new pairVO(rpair.node.right, rpair.vl + 1));
+            }
+        }
+        for (int val : arr)
+            System.out.print(val + " ");
+    }
+
+    public static void topView(Node root) {
+        width(root, 0);
+        int[] arr = new int[rightMaxValue - leftMinValue + 1];
+        Arrays.fill(arr, -1);
+        LinkedList<pairVO> que = new LinkedList<>();
+        que.addLast(new pairVO(root, -leftMinValue));
+        while (que.size() != 0) {
+            int siz = que.size();
+            while (siz-- > 0) {
+                pairVO rpair = que.removeFirst();
+                if (arr[rpair.vl] == -1)
+                    arr[rpair.vl] = rpair.node.data;
+                if (rpair.node.left != null)
+                    que.addLast(new pairVO(rpair.node.left, rpair.vl - 1));
+                if (rpair.node.right != null)
+                    que.addLast(new pairVO(rpair.node.right, rpair.vl + 1));
+            }
+        }
+        for (int val : arr)
+            System.out.print(val + " ");
+    }
+
+    
 }
