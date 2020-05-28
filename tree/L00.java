@@ -13,7 +13,10 @@ public class L00 {
         // verticalView(root);
         // VerticalOrderSum(root);
         // bottomView(root);
-        topView(root);
+        // topView(root);
+        // diagonal_print(root);
+        // diagonal_sum(root);
+        set2(root);
         // DiaPair ab = diameter_02(root);
         // diameter_03(root);
         // System.out.println(fdiameter);
@@ -512,5 +515,88 @@ public class L00 {
             System.out.print(val + " ");
     }
 
-    
+    static int leftMinValue_D = Integer.MAX_VALUE;
+
+    public static void width_D(Node root, int level) {
+        if (root == null)
+            return;
+        leftMinValue_D = Math.min(leftMinValue_D, level);
+        width_D(root.left, level - 1);
+        width_D(root.right, level);
+    }
+
+    public static void diagonal_print(Node root) {
+        width_D(root, 0);
+        int n = -leftMinValue_D + 1;
+        // System.out.println(leftMinValue_D);
+        ArrayList<Integer>[] fans = new ArrayList[n];
+        LinkedList<pairVO> que = new LinkedList<>();
+        for (int i = 0; i < n; i++)
+            fans[i] = new ArrayList<>();
+        que.addLast(new pairVO(root, 0 - leftMinValue_D));
+        while (que.size() != 0) {
+            int siz = que.size();
+            while (siz-- > 0) {
+                pairVO rvtxDo = que.removeFirst();
+                fans[rvtxDo.vl].add(rvtxDo.node.data);
+                if (rvtxDo.node.left != null)
+                    que.addLast(new pairVO(rvtxDo.node.left, rvtxDo.vl - 1));
+                if (rvtxDo.node.right != null)
+                    que.addLast(new pairVO(rvtxDo.node.right, rvtxDo.vl));
+            }
+        }
+        for (ArrayList<Integer> ar : fans)
+            System.out.println(ar);
+        System.out.println();
+    }
+
+    public static void diagonal_sum(Node root) {
+        width_D(root, 0);
+        int n = -leftMinValue_D + 1;
+        int[] fans = new int[n];
+        LinkedList<pairVO> que = new LinkedList<>();
+        que.addLast(new pairVO(root, 0 - leftMinValue_D));
+        while (que.size() != 0) {
+            int siz = que.size();
+            while (siz-- > 0) {
+                pairVO rvtxDo = que.removeFirst();
+                fans[rvtxDo.vl] += rvtxDo.node.data;
+                if (rvtxDo.node.left != null)
+                    que.addLast(new pairVO(rvtxDo.node.left, rvtxDo.vl - 1));
+                if (rvtxDo.node.right != null)
+                    que.addLast(new pairVO(rvtxDo.node.right, rvtxDo.vl));
+            }
+        }
+        for (Integer ar : fans)
+            System.out.print(ar + " ");
+        // System.out.println();
+    }
+
+    static Node DLLhead = null;
+    static Node DLLprev = null;
+
+    // convert into DLL
+    public static void convertDLL(Node root) {
+        if (root == null)
+            return;
+        convertDLL(root.left);
+        if (DLLhead == null) {
+            DLLhead = root;
+            // DLLprev = root;
+        } else {
+            root.left = DLLprev;
+            DLLprev.right = root;
+        }
+        DLLprev = root;
+        convertDLL(root.right);
+    }
+
+    public static void set2(Node node) {
+        convertDLL(node);
+        while (DLLhead != null) {
+            System.out.print(DLLhead.data + " ");
+            DLLhead = DLLhead.right;
+        }
+    }
+
 }
