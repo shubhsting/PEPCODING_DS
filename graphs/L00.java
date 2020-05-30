@@ -211,8 +211,43 @@ public class L00 {
 
     }
 
+    public static class pairbi {
+        int node;
+        int color;
 
-    
+        pairbi(int n, int c) {
+            this.node = n;
+            this.color = c;
+        }
+    }
+
+    public static boolean isbipartite_(int src, int[] vis) {
+        LinkedList<pairbi> que = new LinkedList<>();
+        que.addLast(new pairbi(src, 0));
+        while (que.size() != 0) {
+            int siz = que.size();
+            while (siz-- > 0) {
+                pairbi rpair = que.removeFirst();
+                if (vis[rpair.node] != -1 && vis[rpair.node] != rpair.color)
+                    return false;
+                vis[rpair.node] = rpair.color;
+                for (Edge e : graph[rpair.node]) {
+                    if (vis[e.v] == -1)
+                        que.addLast(new pairbi(e.v, (rpair.color + 1) % 2));
+                }
+            }
+        }
+        return true;
+    }
+
+    public static void bipartite() {
+        int[] vis = new int[graph.length];
+        Arrays.fill(vis, -1);// 0 for red and 1 for green
+        for (int i = 0; i < graph.length; i++) {
+            if (vis[i] != -1)
+                isbipartite_(i, vis);
+        }
+    }
 
     public static void main(String[] args) {
         constructGraph();
