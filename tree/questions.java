@@ -9,21 +9,47 @@ public class questions {
 
     }
 
-    long prev = -1e12;
+    double prev = -1e12;
 
     public boolean isValidBST(TreeNode root) {
         if (root == null)
             return true;
         if (!isValidBST(root.left))
             return false;
-        if (prev >= root.data)
+        if (prev >= root.val)
             return false;
-        rev = root.data;
+        prev = root.val;
         if (!isValidBST(root.right))
             return false;
 
         return true;
     }
+
+// ===================leetcode 993===================
+ class Pair{
+        TreeNode parent;
+        int level;
+        
+        Pair(TreeNode parent, int level){
+            this.parent = parent;
+            this.level = level;
+        }
+    }
+    public boolean isCousins(TreeNode root, int x, int y) {
+        Pair px=isCousins_(root,null,x,0);
+        Pair py=isCousins_(root,null,y,0);
+        return px.parent!=py.parent && px.level==py.level;
+    }
+     public Pair isCousins_(TreeNode root,TreeNode par, int req,int level) {
+        if(root==null) return null;
+         if(root.val==req) return new Pair(par,level);
+        Pair lft=isCousins_(root.left,root,req,level+1);
+        Pair rt=isCousins_(root.right,root,req,level+1);
+         return lft==null?rt:lft;      
+    }
+
+
+
 
     // =================leetcode 684==================
 
@@ -66,18 +92,18 @@ public class questions {
     }
 
     // ================= leetcode 589=====================
-    public List<Integer> preorder(Node root) {
+    public List<Integer> preorder(TreeNode_G root) {
         List<Integer> ans = new ArrayList<>();
         preorder_(root, ans);
         return ans;
 
     }
 
-    public void preorder_(Node root, List<Integer> ans) {
+    public void preorder_(TreeNode_G root, List<Integer> ans) {
         if (root == null)
             return;
         ans.add(root.val);
-        for (Node e : root.children)
+        for (TreeNode_G e : root.children)
             preorder_(e, ans);
     }
 
@@ -128,7 +154,32 @@ public class questions {
         sumRootToLeaf_(root, 0);
         return fans;
     }
+ public static class Node {
+        int data;
+        Node left;
+        Node right;
 
+        Node(int data) {
+            this.data = data;
+        }
+    }
+     public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+
+        TreeNode(int data) {
+            this.val = data;
+        }
+    }
+    public static class TreeNode_G{
+        int val;
+       TreeNode_G[] children;
+
+        TreeNode_G(int data) {
+            this.val = data;
+        }
+    }
     public void sumRootToLeaf_(TreeNode root, int currsum) {
         if (root == null)
             return;
@@ -214,16 +265,47 @@ public class questions {
     }
 
     // alternate solution
-    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+    public TreeNode mergeTrees_01(TreeNode t1, TreeNode t2) {
         if (t1 == null)
             return t2;
         if (t2 == null)
             return t1;
         t1.val += t2.val;
-        t1.left = mergeTrees(t1.left, t2.left);
-        t1.right = mergeTrees(t1.right, t2.right);
+        t1.left = mergeTrees_01(t1.left, t2.left);
+        t1.right = mergeTrees_01(t1.right, t2.right);
         return t1;
     }
 
-    
+    // leetcode 669======================
+    public TreeNode trimBST(TreeNode root, int L, int R) {
+        if (root == null)
+            return null;
+
+        root.left = trimBST(root.left, L, R);
+        root.right = trimBST(root.right, L, R);
+
+        return root.val < L ? root.right : root.val > R ? root.left : root;
+    }
+
+    // ============leetcode 637==================
+    public List<Double> averageOfLevels(TreeNode root) {
+        LinkedList<TreeNode> que = new LinkedList<>();
+        List<Double> ans = new ArrayList<>();
+        que.add(root);
+        while (que.size() != 0) {
+            int siz = que.size();
+            double fs = (double) siz;
+            double tot = 0;
+            while (siz-- > 0) {
+                TreeNode node = que.removeFirst();
+                tot += node.val;
+                if (node.left != null)
+                    que.addLast(node.left);
+                if (node.right != null)
+                    que.addLast(node.right);
+            }
+            ans.add(tot / fs);
+        }
+        return ans;
+    }
 }

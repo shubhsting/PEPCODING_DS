@@ -8,7 +8,7 @@ public class BST {
         // display(constructTree(arr, 0, arr.length - 1));
         Node root = constructTree(arr, 0, arr.length - 1);
         // System.out.println(greatestBST(root));
-        ArrayList<Integer> ans=new ArrayList<>();
+        ArrayList<Integer> ans = new ArrayList<>();
         inRange_01(root, 10, 65, ans);
         System.out.println(ans);
     }
@@ -116,5 +116,67 @@ public class BST {
         inRange_01(root.right, x, y, ans);
     }
 
-    
+    // node pr pachne tak dhyaan dhyaan se predecessor aur successor decide kro uske
+    // baad to fix hai
+    public static void predndsuccessor(Node root, int data) {
+        Node curr = root;
+        Node pred = null;
+        Node successor = null;
+        while (curr != null) {
+            if (curr.data == data) {
+                if (curr.left == null)
+                    System.out.println("Predecessor is: " + (pred != null ? pred.data : -1));
+                else {
+                    pred = curr.left;
+                    while (pred.right != null)
+                        pred = pred.right;
+                    System.out.println("Predecessor is:" + pred.data);
+                }
+
+                if (curr.right == null)
+                    System.out.println("Successor is: " + (successor != null ? successor.data : -1));
+                else {
+                    successor = curr.right;
+                    while (successor.left != null)
+                        successor = successor.left;
+                    System.out.println("Successor is:" + successor.data);
+                }
+                break;
+
+            } else if (data < curr.data) {
+                successor = curr;
+                curr = curr.left;
+            } else {
+                pred = curr;
+                curr = curr.right;
+            }
+        }
+    }
+
+    public static Node addData(Node root, int data) {
+        if (root == null)
+            return new Node(data);
+        if (data < root.data)
+            root.left = addData(root.left, data);
+        if (data > root.data)
+            root.right = addData(root.right, data);
+        return root;
+    }
+
+    public static Node removeData(Node root, int data) {
+        if (root == null)
+            return null;
+        if (data < root.data)
+            root.left = removeData(root.left, data);
+        else if (data > root.data)
+            root.right = removeData(root.right, data);
+        else {
+            if (root.right == null || root.left == null)
+                return root.right == null ? root.left : root.right;
+            int left_max = greatestBST(root.left);
+            root.data = left_max;
+            root.left = removeData(root.left, left_max);
+        }
+        return root;
+    }
 }
