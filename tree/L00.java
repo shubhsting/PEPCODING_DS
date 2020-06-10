@@ -599,4 +599,21 @@ public class L00 {
         }
     }
 
+    public static class allSolution {
+        int height = 0;
+        int size = 0;
+        boolean find = false;
+        Node pred = null;
+        Node succ = null;
+        Node prev = null;
+    }
+
+    public static void full(Node root, int data, int level, allSolution pair) {
+        if (root == null)
+            return;
+        pair.size++;
+        pair.height = Math.max(pair.height, level);
+        full(root.left, data, level + 1, pair);
+        full(root.right, data, level + 1, pair);
+    }
 }

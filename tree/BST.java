@@ -153,6 +153,33 @@ public class BST {
         }
     }
 
+    static int idx = 0;
+
+    // bstFromPreorder_(preorder,Integer.MIN_VALUE,Integer.MAX_VALUE);
+    public static Node constructTreefromPreOrder(int[] preOrder, int lb, int rb) {
+        if (idx >= preOrder.length || preOrder[idx] > rb || preOrder[idx] < lb)
+            return null;
+
+        Node root = new Node(preOrder[idx]);
+        idx++;
+        root.left = constructTreefromPreOrder(preOrder, lb, root.data);
+        root.right = constructTreefromPreOrder(preOrder, root.data, rb);
+        return root;
+    }
+
+    public static int heightofBST(int[] preorder, int lb, int rb) {
+        if (idx >= preorder.length || preorder[idx] > rb || preorder[idx] < lb)
+            return -1;
+        int ele = preorder[idx];
+        idx++;
+        int lh = heightofBST(preorder, lb, ele);
+        int rh = heightofBST(preorder, ele, rb);
+        return Math.max(rh, lh) + 1;
+    }
+
+
+    
+
     public static Node addData(Node root, int data) {
         if (root == null)
             return new Node(data);
