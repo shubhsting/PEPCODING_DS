@@ -133,4 +133,7 @@ public class generictree {
         root.childs.clear();
         root.childs = temp;
     }
+
+
+    
 }
