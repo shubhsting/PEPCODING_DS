@@ -265,5 +265,69 @@ public class questions {
         return nhead.next;
     }
 
+    // =====================leetcode 817=======================
+    // dfs aise lgta hai linkedlist mein
+    public int numComponents(ListNode head, int[] G) {
+        Set<Integer> set = new HashSet<>();
+        for (int num : G)
+            set.add(num);
+        int components = 0;
+        while (head != null) {
+            if (set.contains(head.val)) {
+                components++;
+                while (head != null && set.contains(head.val))
+                    head = head.next;
+            } else
+                head = head.next;
+        }
+        return components;
+    }
+
+    // add 2 numbesrs jha 0 nhi hai vha zero let kr lenge
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode result = new ListNode();
+        ListNode curRes = result;
+        ListNode cur1 = l1;
+        ListNode cur2 = l2;
+
+        int sum = 0;
+        int carry = 0;
+        int remainder = 0;
+
+        while (cur1 != null || cur2 != null) {
+            if (cur1 == null)
+                cur1 = new ListNode(0);
+            if (cur2 == null)
+                cur2 = new ListNode(0);
+
+            sum = cur1.val + cur2.val + carry;
+            remainder = sum % 10;
+            carry = sum / 10;
+
+            curRes.next = new ListNode(remainder);
+
+            curRes = curRes.next;
+            cur1 = cur1.next;
+            cur2 = cur2.next;
+        }
+        if (carry != 0) {
+            curRes.next = new ListNode(carry);
+        }
+        return result.next;
+    }
+
+    // sort list using merge sort
+    public ListNode sortList(ListNode head) {
+        if (head == null || head.next == null)
+            return head;
+        ListNode mid = getMidNode2(head);
+        ListNode head2 = mid.next;
+        mid.next = null;
+        ListNode left = sortList(head);
+        ListNode right = sortList(head2);
+        head = mergeTwoLists(left, right);
+        return head;
+    }
+
     
 }
