@@ -1,4 +1,5 @@
-import java.lang.reflect.Array;
+package classcodes;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -288,7 +289,6 @@ public class L00 {
     public static void levelOrder_00(Node root) {
         LinkedList<Node> pQueue = new LinkedList<>();
         // LinkedList<Node> sQueue = new LinkedList<>();
-        int level = 0;
         pQueue.addLast(root);
         while (pQueue.size() != 0) {
             Node frnt = pQueue.removeFirst();

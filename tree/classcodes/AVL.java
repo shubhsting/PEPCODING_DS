@@ -1,3 +1,5 @@
+package classcodes;
+
 public class AVL {
     public static class Node {
         int data = 0;
