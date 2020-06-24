@@ -211,5 +211,58 @@ public class questions {
         return ans;
     }
 
+    // leetcode 1047
+    public String removeDuplicates(String str) {
+        Stack st = new Stack();
+        HashSet<Character> hs = new HashSet<>();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (st.size() == 0 || (char) st.peek() != ch)
+                st.push(ch);
+            else
+                st.pop();
+        }
+        StringBuilder sb = new StringBuilder();
+        while (!st.isEmpty())
+            sb.insert(0, (char) st.pop());
+        return sb.toString();
+    }
+
+    // 735 leetcode
+
+    public int[] asteroidCollision(int[] asteroids) {
+        Stack st = new Stack();
+        for (int i = 0; i < asteroids.length; i++) {
+            int num = asteroids[i];
+            if (num > 0)
+                st.push(num);
+            else {
+                while (st.size() != 0 && (int) st.peek() > 0 && (int) st.peek() < -num)
+                    st.pop();
+
+                if (st.size() != 0 && (int) st.peek() == -num)
+                    st.pop();
+                else if (st.size() == 0 || (int) st.peek() < 0)
+                    st.push(num);
+                else if (st.size() != 0 && (int) st.peek() > -num) {
+                    // kuch mt kro kyoki kbhi collide nhi honge
+                }
+            }
+        }
+
+        int[] ans = new int[st.size()];
+        int i = st.size() - 1;
+        while (st.size() != 0) {
+            ans[i] = (int) st.pop();
+            i--;
+        }
+
+        return ans;
+
+    }
+
+
+
+
     
 }
