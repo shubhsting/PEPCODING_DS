@@ -261,7 +261,67 @@ public class questions {
 
     }
 
+    public static int[] nsor(int[] arr) {
+        Stack st = new Stack();
+        int ans[] = new int[arr.length];
+        Arrays.fill(ans, arr.length);
+        for (int i = 0; i < arr.length; i++) {
+            while (st.size() != 0 && arr[(int) st.peek()] > arr[i]) {
+                ans[(int) st.peek()] = i;
+            }
+            st.push(i);
+        }
+        return ans;
+    }
 
+    public static int[] nsol(int[] arr) {
+        Stack st = new Stack();
+        int ans[] = new int[arr.length];
+        Arrays.fill(ans, -1);
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (st.size() != 0 && arr[(int) st.peek()] > arr[i]) {
+                ans[(int) st.peek()] = i;
+            }
+            st.push(i);
+        }
+        return ans;
+    }
+
+    public static int largestRectangleArea(int[] heights) {
+        int[] nsorA = nsor(heights);
+        int[] nsolA = nsol(heights);
+        int max_ = 0;
+        for (int i = 0; i < heights.length; i++) {
+            int width = nsorA[i] - nsolA[i] - 1;
+            int area = width * heights[i];
+            max_ = Math.max(max_, area);
+        }
+        return max_;
+    }
+
+    public static int largestRectangleArea_(int[] heights) {
+        Stack st = new Stack();
+        st.push(-1);
+        int max_ = 0;
+        for (int i = 0; i < heights.length; i++) {
+            while ((int) st.peek() != -1 && heights[(int) st.peek()] >= heights[i]) {
+                int height = heights[(int) st.pop()];
+                int width = i - (int) st.peek() - 1;
+                int area = height * width;
+                if (area > max_)
+                    max_ = area;
+            }
+            st.push(i);
+        }
+        while ((int) st.peek() != -1) {
+            int height = heights[(int) st.pop()];
+            int width = heights.length - (int) st.peek() - 1;
+            int area = height * width;
+            if (area > max_)
+                max_ = area;
+        }
+        return max_;
+    }
 
 
     
