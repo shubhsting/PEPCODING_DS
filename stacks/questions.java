@@ -323,6 +323,123 @@ public class questions {
         return max_;
     }
 
+    public int maximalRectangle(char[][] matrix) {
+        int[] arr = new int[matrix[0].length];
+        int max_ = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                int num = matrix[i][j] - 'a';
+                if (num == 1)
+                    arr[j] += 1;
+                else
+                    arr[j] = 0;
+            }
+            int area = largestRectangleArea(arr);
+            max_ = Math.max(area, max_);
+        }
+        return max_;
+    }
 
-    
+    public int trap(int[] height) {
+        int n = height.length;
+        int[] gol = new int[n];
+        int[] gor = new int[n];
+        int prev = -1;
+        for (int i = 0; i < n; i++) {
+            gol[i] = Math.max(prev, height[i]);
+            prev = gol[i];
+        }
+        prev = -1;
+        for (int i = n - 1; i >= 0; i--) {
+            gor[i] = Math.max(prev, height[i]);
+            prev = gor[i];
+        }
+        int trap = 0;
+        for (int i = 0; i < n; i++)
+            trap += Math.min(gol[i], gor[i]) - height[i];
+
+        return trap;
+    }
+
+    public int trap_(int[] height) {
+        Stack st = new Stack();
+        int n = height.length;
+        for (int i = 0; i < n; i++) {
+            while (st.size() != 0 && height[(int) st.peek()] <= height[i]) {
+                int height_ = height[(int) st.pop()];
+                if (st.size() == 0)
+                    break;
+                int width = i - (int) (st.peek()) - 1;
+                water += width * (Math.min(height[i], height[(int) st.peek()]) - height_);
+            }
+            st.push(i);
+        }
+        return water;
+    }
+
+    public int trap02(int[] height) {
+        int n = height.length;
+        int lft = 0;
+        int rt = n - 1;
+        int lmaxBH = 0;
+        int rmaxBH = 0;
+        int water = 0;
+        while (lft <= rt) {
+            lmaxBH = Math.max(lmaxBH, height[lft]);
+            rmaxBH = Math.max(rmaxBH, height[rt]);
+            water += lmaxBH >= rmaxBH ? rmaxBH - height[rt--] : lmaxBH - height[lft++];
+        }
+        return water;
+    }
+
+    // leetcode 155
+    class MinStack {
+        Stack st;
+        long minSF = 0;
+
+        /** initialize your data structure here. */
+        public MinStack() {
+            st = new Stack();
+            minSF = 0;
+        }
+
+        public void push(long x) {
+            if (st.size() == 0) {
+                st.push(x);
+                minSF = x;
+                return;
+            }
+            if (x < minSF) {
+                long temp = (2 * x) - minSF;
+                st.push(temp);
+                minSF = x;
+            } else
+                st.push(x);
+        }
+
+        public void pop() {
+            if ((long) st.peek() < minSF) {
+                long temp = (2 * minSF) - (long) st.peek();
+                minSF = temp;
+            }
+
+            st.pop();
+        }
+
+        public long top() {
+            if ((long) st.peek() > minSF)
+                return (long) st.peek();
+            return minSF;
+        }
+
+        public long getMin() {
+            return minSF;
+        }
+    }
+
+    /**
+     * Your MinStack object will be instantiated and called as such: MinStack obj =
+     * new MinStack(); obj.push(x); obj.pop(); int param_3 = obj.top(); int param_4
+     * = obj.getMin();
+     */
 }
