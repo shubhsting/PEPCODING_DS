@@ -542,6 +542,26 @@ public class questions {
         return fans;
     }
 
+    // leetcode 339
+    public boolean isValidSerialization(String str) {
+        String[] nodes = str.split(",");
+        Stack st = new Stack();
+        for (int i = 0; i < nodes.length; i++) {
+            String ch = nodes[i];
+            if (ch.charAt(0) == '#') {
+                while (st.size() != 0 && ((String) st.peek()).charAt(0) == '#') {
+                    st.pop();
+                    if (st.size() == 0)
+                        return false;
+                    st.pop();
+                }
 
-    
+                st.push(ch);
+
+            } else
+                st.push(ch);
+        }
+
+        return st.size() == 1 && ((String) st.pop()).charAt(0) == '#';
+    }
 }
