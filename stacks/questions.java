@@ -442,4 +442,106 @@ public class questions {
      * new MinStack(); obj.push(x); obj.pop(); int param_3 = obj.top(); int param_4
      * = obj.getMin();
      */
+    // leetcode 946
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        int idx = 0;
+        Stack st = new Stack();
+        for (int i = 0; i < pushed.length; i++) {
+            while (idx < popped.length && st.size() != 0 && (int) st.peek() == popped[idx]) {
+                st.pop();
+                idx++;
+            }
+            st.push(pushed[i]);
+        }
+        while (idx < popped.length && st.size() != 0 && (int) st.peek() == popped[idx]) {
+            st.pop();
+            idx++;
+        }
+        return st.size() == 0;
+    }
+
+    // leetcode 1190
+
+    public String reverseParentheses(String str) {
+        Stack st = new Stack();
+        for (int i = 0; i < str.length(); i++) {
+            char ch = str.charAt(i);
+            if (ch == ')') {
+                String rvse = "";
+                while (st.size() != 0 && (char) st.peek() != '(') {
+                    rvse += (char) st.pop();
+                }
+                st.pop();
+                for (int ip = 0; ip < rvse.length(); ip++)
+                    st.push(rvse.charAt(ip));
+            } else
+                st.push(ch);
+        }
+        String ans = "";
+        while (!st.isEmpty()) {
+            ans = (char) st.pop() + ans;
+        }
+        return ans;
+    }
+
+    // leetcode 103
+
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        if (root == null)
+            return new ArrayList<>();
+        LinkedList<TreeNode> que = new LinkedList<>();
+        List<List<Integer>> ans = new ArrayList<>();
+        que.addFirst(root);
+        int level = 0;
+        while (que.size() != 0) {
+            int siz = que.size();
+            ArrayList<Integer> temp = new ArrayList<>();
+            while (siz-- > 0) {
+                TreeNode nd = que.removeFirst();
+                temp.add(nd.val);
+                if (nd.left != null)
+                    que.addLast(nd.left);
+                if (nd.right != null)
+                    que.addLast(nd.right);
+            }
+            if ((level % 2) != 0)
+                Collections.reverse(temp);
+            level++;
+            ans.add(temp);
+        }
+        return ans;
+    }
+
+    // leetcode 394
+    public String decodeString(String str) {
+        Stack st = new Stack();
+        String fans = "";
+        for (int i = 0; i < str.length(); i++) {
+            String ch = str.charAt(i) + "";
+            if (ch.charAt(0) == ']') {
+                String stri = "";
+                while (((String) st.peek()).charAt(0) != '[')
+                    stri = (String) st.pop() + stri;
+
+                st.pop();
+                String num = "";
+                while (st.size() != 0 && ((String) st.peek()).charAt(0) >= '0' && ((String) st.peek()).charAt(0) <= '9')
+                    num = (String) st.pop() + num;
+
+                int tot = Integer.parseInt(num);
+
+                while (tot-- > 0) {
+                    st.push(stri);
+                }
+            } else
+                st.push(ch);
+        }
+        while (st.size() != 0) {
+            fans = (String) st.pop() + fans;
+        }
+        return fans;
+    }
+
+
+    
 }
