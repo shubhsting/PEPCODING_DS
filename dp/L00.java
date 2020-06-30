@@ -263,6 +263,172 @@ public class L00 {
         // return climbStairs_btr(n);
     }
 
+    public int minCostClimbingStairs(int[] cost) {
+        int n = cost.length;
+        int[] dp = new int[n + 1];
+        int[] ncost = new int[n + 1];
+        for (int i = 0; i < n; i++) {
+            ncost[i] = cost[i];
+        }
+        minCostClimbingStairs_(n, dp, ncost);
+        return dp[n];
+    }
+
+    public int minCostClimbingStairs_(int n, int[] dp, int[] cost) {
+        if (n <= 1)
+            return dp[n] = cost[n];
+        if (dp[n] != 0)
+            return dp[n];
+        int temp = Math.min(minCostClimbingStairs_(n - 1, dp, cost), minCostClimbingStairs_(n - 2, dp, cost));
+        return dp[n] = temp + cost[n];
+    }
+
+    public int minCostClimbingStairs_DP(int n, int[] dp, int[] cost) {
+        int N = n;
+        for (n = 0; n <= N; n++) {
+            if (n <= 1) {
+                dp[n] = cost[n];
+                continue;
+            }
+
+            int temp = Math.min(dp[n - 1], dp[n - 2]);
+            dp[n] = temp + cost[n];
+        }
+        return dp[N];
+    }
+
+    public int friends_pairing_problem(int n, int[] dp) {
+        if (n <= 1)
+            return dp[n] = 1;
+        if (dp[n] != 0)
+            return dp[n];
+        int single = friends_pairing_problem(n - 1, dp);
+        int pairUp = friends_pairing_problem(n - 2, dp) * (n - 1);
+        return dp[n] = single + pairUp;
+    }
+
+    public int friends_pairing_problemDP(int n, int[] dp) {
+        int N = n;
+        for (n = 0; n <= N; n++) {
+            if (n <= 1) {
+                dp[n] = 1;
+                continue;
+            }
+            int single = friends_pairing_problem(n - 1, dp);
+            int pairUp = friends_pairing_problem(n - 2, dp) * (n - 1);
+            dp[n] = single + pairUp;
+        }
+        return dp[N];
+    }
+
+    public int minPathSum(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        int[][] dp = new int[n][m];
+        minPathSum_(0, 0, dp, grid);
+        return dp[0][0];
+    }
+
+    public int minPathSum_(int cr, int cc, int[][] dp, int[][] grid) {
+        if (cr == grid.length - 1 && cc == grid[0].length - 1)
+            return dp[cr][cc] = grid[cr][cc];
+        if (dp[cr][cc] != 0)
+            return dp[cr][cc];
+        int min_ = (int) 1e8;
+        if (cr + 1 < grid.length)
+            min_ = Math.min(min_, minPathSum_(cr + 1, cc, dp, grid));
+        if (cc + 1 < grid[0].length)
+            min_ = Math.min(min_, minPathSum_(cr, cc + 1, dp, grid));
+        return dp[cr][cc] = min_grid[cr][cc];
+    }
+
+    public int minPathSum_DP(int cr, int cc, int[][] dp, int[][] grid) {
+        for (cr = grid.length - 1; cr >= 0; cr--) {
+            for (cc = grid[0].length - 1; cc >= 0; cc--) {
+                if (cr == grid.length - 1 && cc == grid[0].length - 1) {
+                    dp[cr][cc] = grid[cr][cc];
+                    continue;
+                }
+                int min_ = (int) 1e8;
+                if (cr + 1 < grid.length)
+                    min_ = Math.min(min_, dp[cr + 1][cc]);
+                if (cc + 1 < grid[0].length)
+                    min_ = Math.min(min_, dp[cr][cc + 1]);
+                dp[cr][cc] = min_grid[cr][cc];
+            }
+        }
+        return dp[0][0];
+    }
+
+    // ====================substing and subsequence========================
+    // j<n isiliye likha kyoki j phle n ke equal ho jayega
+    public boolean[][] isPalindromic_Substr(String str) {
+        int n = str.length();
+        boolean[][] dp = new boolean[n][n];
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                if (i == j)
+                    dp[i][j] = true;
+                else if (gap == 1)
+                    dp[i][j] = str.charAt(i) == str.charAt(j);
+                else
+                    dp[i][j] = (str.charAt(i) == str.charAt(j)) && (dp[i + 1][j - 1]);
+            }
+        }
+        return dp;
+    }
+
+    // leetcode 5
+    public String longestPalindrome(String str) {
+        int n = str.length();
+        int[][] dp = new int[n][n];
+        int si = 0;
+        int ei = 0;
+        int maxlen = 0;
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n; i++, j++) {
+                if (gap == 0)
+                    dp[i][j] = 1;
+                else if (gap == 1 && str.charAt(i) == str.charAt(j))
+                    dp[i][j] = 2;
+                else if ((str.charAt(i) == str.charAt(j)) && dp[i + 1][j - 1] != 0)
+                    dp[i][j] = gap + 1;
+                if (dp[i][j] > maxlen) {
+                    maxlen = dp[i][j];
+                    si = i;
+                    ei = j;
+                }
+            }
+        }
+        return str.substring(si, ei + 1);
+    }
+
+
+
+
+    public int countSubstrings(String str) {
+        int n = str.length();
+        if (n == 0)
+            return 0;
+        int[][] dp = new int[n][n];
+        int count = 0;
+        for (int gap = 0; gap < n; gap++) {
+            for (int i = 0, j = gap; j < n && i < n; i++, j++) {
+                char ci = str.charAt(i);
+                char cj = str.charAt(j);
+                if (gap == 0)
+                    dp[i][j] = 1;
+                else if (gap == 1 && ci == cj)
+                    dp[i][j] = 2;
+                else if ((ci == cj) && dp[i + 1][j - 1] != 0)
+                    dp[i][j] = gap + 1;
+                count += dp[i][j] != 0 ? 1 : 0;
+            }
+        }
+        return count;
+    }
+
+
 
     
 }
