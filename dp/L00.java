@@ -403,9 +403,6 @@ public class L00 {
         return str.substring(si, ei + 1);
     }
 
-
-
-
     public int countSubstrings(String str) {
         int n = str.length();
         if (n == 0)
@@ -428,7 +425,19 @@ public class L00 {
         return count;
     }
 
+    // leetcode 1143
+    public int longestcommonsubsequence(String str1, String str2, int l1, int l2, int[][] dp) {
+        if (l1 == str1.length() || l2 == str2.length())
+            return dp[l1][l2] = 0;
+        if (dp[l1][l2] != 0)
+            return dp[l1][l2];
+        int ans = 0;
+        if (str1.charAt(l1) == str2.charAt(l2))
+            ans = longestcommonsubsequence(str1, str2, l1 + 1, l2 + 1, dp);
+        else
+            ans = Math.max(longestcommonsubsequence(str1, str2, l1 + 1, l2, dp),
+                    longestcommonsubsequence(str1, str2, l1, l2 + 1, dp));
+        return dp[l1][l2] = ans;
+    }
 
-
-    
 }
