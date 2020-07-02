@@ -359,6 +359,47 @@ public class L00 {
         }
         return dp[0][0];
     }
+    // https://www.geeksforgeeks.org/gold-mine-problem/
+
+    public int goldMin(int sr, int sc, int[][] grid, int[][] dp) {
+        if (sc == grid[0].length - 1)
+            return dp[sr][sc] = grid[sr][sc];
+        if (dp[sr][sc] != 0)
+            return dp[sr][sc];
+        int[][] dirA_ = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
+        int maxCoins = 0;
+        for (int i = 0; i < 3; i++) {
+            int r = sr + dirA_[i][0];
+            int c = sc + dirA_[i][1];
+            if (r >= 0 && c >= 0 && r < grid.length && c < grid[0].length)
+                maxCoins = Math.max(goldMin(r, c, grid, dp), maxCoins);
+        }
+        return dp[sr][sc] = maxCoins + grid[sr][sc];
+    }
+
+    public int goldMinDP(int sr, int sc, int[][] grid, int[][] dp) {
+        for (sc = grid[0].length - 1; sc >= 0; sc--) {
+            for (sr = grid.length - 1; sr >= 0; sr--) {
+                if (sc == grid[0].length - 1) {
+                    dp[sr][sc] = grid[sr][sc];
+                    continue;
+                }
+                int[][] dirA_ = { { -1, 1 }, { 0, 1 }, { 1, 1 } };
+                int maxCoins = 0;
+                for (int i = 0; i < 3; i++) {
+                    int r = sr + dirA_[i][0];
+                    int c = sc + dirA_[i][1];
+                    if (r >= 0 && c >= 0 && r < grid.length && c < grid[0].length)
+                        maxCoins = Math.max(dp[r][c], maxCoins);
+                }
+                dp[sr][sc] = maxCoins + grid[sr][sc];
+            }
+        }
+        int ansm = 0;
+        for (int i = 0; i < grid.length; i++)
+            ansm = Math.max(ansm, dp[i][0]);
+        return ansm;
+    }
 
     // ====================substing and subsequence========================
     // j<n isiliye likha kyoki j phle n ke equal ho jayega
@@ -425,6 +466,49 @@ public class L00 {
         return count;
     }
 
+    // leetcode 516
+
+    public int longestPalindromeSubseq(String str) {
+        int[][] dp = new int[str.length()][str.length()];
+        return longestPalindromeSubseq_Rec(0, str.length() - 1, str, dp);
+    }
+
+    public int longestPalindromeSubseq_Rec(int si, int ei, String str, int[][] dp) {
+        if (si > ei)
+            return 0;
+        if (si == ei)
+            return dp[si][ei] = 1;
+        if (dp[si][ei] != 0)
+            return dp[si][ei];
+        int count = 0;
+        if (str.charAt(si) == str.charAt(ei))
+            count = longestPalindromeSubseq_Rec(si + 1, ei - 1, str, dp);
+        else
+            count = Math.max(longestPalindromeSubseq_Rec(si + 1, ei, str, dp),
+                    longestPalindromeSubseq_Rec(si, ei - 1, str, dp));
+        return dp[si][ei] = count;
+    }
+
+    public int longestPalindromeSubseq_DP(int si, int ei, String str, int[][] dp) {
+        int n = str.length();
+        for (int gap = 0; gap < n; gap++) {
+            for (ei = gap, si = 0; ei < n && ei < n; ei++, si++) {
+                if (si == ei) {
+                    dp[si][ei] = 1;
+                    continue;
+                }
+
+                int count = 0;
+                if (str.charAt(si) == str.charAt(ei))
+                    count = dp[si + 1][ei - 1] + 2;
+                else
+                    count = Math.max(dp[si + 1][ei], dp[si][ei - 1]);
+                dp[si][ei] = count;
+            }
+        }
+        return dp[0][n - 1];
+    }
+
     // leetcode 1143
     public int longestcommonsubsequence(String str1, String str2, int l1, int l2, int[][] dp) {
         if (l1 == str1.length() || l2 == str2.length())
@@ -433,7 +517,7 @@ public class L00 {
             return dp[l1][l2];
         int ans = 0;
         if (str1.charAt(l1) == str2.charAt(l2))
-            ans = longestcommonsubsequence(str1, str2, l1 + 1, l2 + 1, dp);
+            ans = longestcommonsubsequence(str1, str2, l1 + 1, l2 + 1, dp) + 2;
         else
             ans = Math.max(longestcommonsubsequence(str1, str2, l1 + 1, l2, dp),
                     longestcommonsubsequence(str1, str2, l1, l2 + 1, dp));
