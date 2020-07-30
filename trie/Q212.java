@@ -33,7 +33,7 @@ public class Q212 {
         if (node.WordEnd) {
             node.WordEnd = false;
             ans.add(node.word);
-        }
+        } 
         char ch = board[r][c];
         board[r][c] = '$';
         for (int i = 0; i < dirA.length; i++) {
